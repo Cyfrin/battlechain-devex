@@ -1,0 +1,18 @@
+[submodule "battlechain-lib"]
+	path = battlechain-lib
+	url = https://github.com/Cyfrin/battlechain-lib
+[submodule "battlechain-prediction"]
+	path = battlechain-prediction
+	url = https://github.com/Cyfrin/battlechain-prediction
+[submodule "battlechain-safe-harbor"]
+	path = battlechain-safe-harbor
+	url = https://github.com/Cyfrin/battlechain-safe-harbor
+[submodule "battlechain-starter"]
+	path = battlechain-starter
+	url = https://github.com/Cyfrin/battlechain-starter
+[submodule "docs-battlechain"]
+	path = docs-battlechain
+	url = https://github.com/Cyfrin/docs-battlechain
+[submodule "solskill"]
+	path = solskill
+	url = https://github.com/Cyfrin/solskill

@@ -1,0 +1,24 @@
+# Foundry
+cache/
+out/
+broadcast/
+
+# Node / Next.js
+node_modules/
+.next/
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cyfrin
+*.local.*
+.notes.md
