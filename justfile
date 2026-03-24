@@ -25,11 +25,11 @@ status:
     @echo "=== root ==="
     @git status --short
 
-# Show diff stats across all submodules
+# Show full diff across all submodules and root
 diff:
     @for dir in {{submodules}}; do \
         if [ -d "$dir/.git" ] || [ -f "$dir/.git" ]; then \
-            changes=$(cd "$dir" && git diff --stat 2>/dev/null); \
+            changes=$(cd "$dir" && git diff --color=always 2>/dev/null); \
             if [ -n "$changes" ]; then \
                 echo "=== $dir ==="; \
                 echo "$changes"; \
@@ -37,6 +37,55 @@ diff:
             fi; \
         fi; \
     done
+    @changes=$(git diff --color=always --ignore-submodules 2>/dev/null); \
+    if [ -n "$changes" ]; then \
+        echo "=== root ==="; \
+        echo "$changes"; \
+    fi
+
+# Pull all submodules and root to latest main
+pull:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    failed=()
+    for dir in {{submodules}}; do
+        if [ -d "$dir/.git" ] || [ -f "$dir/.git" ]; then
+            echo "=== $dir ==="
+            if ! (cd "$dir" && git checkout main && git pull); then
+                echo "SKIPPED: $dir has uncommitted changes — commit or stash first"
+                failed+=("$dir")
+            fi
+            echo
+        fi
+    done
+    echo "=== root ==="
+    git checkout main && git pull
+    if [ ${#failed[@]} -gt 0 ]; then
+        echo
+        echo "Failed to pull: ${failed[*]}"
+        echo "Run 'just status' to see uncommitted changes"
+    fi
+
+# Update root to track current submodule commits
+sync:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    updated=()
+    for dir in {{submodules}}; do
+        if [ -d "$dir/.git" ] || [ -f "$dir/.git" ]; then
+            if git diff --quiet "$dir" 2>/dev/null; then
+                continue
+            fi
+            git add "$dir"
+            updated+=("$dir")
+        fi
+    done
+    if [ ${#updated[@]} -eq 0 ]; then
+        echo "All submodule pointers are up to date."
+    else
+        git commit -m "chore: sync submodule pointers"
+        echo "Synced: ${updated[*]}"
+    fi
 
 # Commit all dirty submodules with the same message, then update root
 commit-all msg:
