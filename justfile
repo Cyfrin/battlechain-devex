@@ -1,4 +1,8 @@
-submodules := "battlechain-lib battlechain-starter battlechain-safe-harbor battlechain-prediction docs-battlechain solskill bc-dependency-contracts"
+submodules := "battlechain-lib battlechain-starter battlechain-safe-harbor battlechain-prediction docs-battlechain solskill bc-dependency-contracts battlechain-bot-framework"
+
+# List all available targets
+list:
+    @just --list
 
 # Show current branch for each submodule
 branch:
